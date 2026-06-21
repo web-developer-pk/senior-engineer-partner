@@ -1,0 +1,12 @@
+# Build / eval artifacts
+*-workspace/
+sep-eval/
+v2/
+__pycache__/
+*.pyc
+node_modules/
+package-lock.json
+.DS_Store
+
+# Keep the published .skill release artifact tracked; ignore stray zips
+*.zip
