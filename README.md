@@ -73,7 +73,7 @@ It deliberately does **not** trigger for pure explanatory questions ("what does 
 
 ## Credits and influences
 
-This skill is an original synthesis, but it stands on ideas from others:
+This skill is an original synthesis based on my personal experiences, but it also stands on ideas from others:
 
 - **Andrej Karpathy** — the spec / verifier / environment framing and the "you can outsource thinking, but not understanding" principle that anchors the skill.
 - **The Claude Code / Cowork community** — the `CLAUDE.md` convention and the broader practice of persisting working context to Markdown.
