@@ -82,6 +82,16 @@ This skill is an original synthesis based on my personal experiences, but it als
 
 Referenced third-party material (a cheatsheet infographic and a video transcript on the Karpathy method) informed the design but is **not** redistributed here — please seek out the original creators' work.
 
+## Author
+
+Created and maintained by **Muhammad Omar** ([@web-developer-pk](https://github.com/web-developer-pk)).
+
+This skill is substantial original work — many hours of design, testing, and iteration. If you use, adapt, fork, or build on it, please keep the attribution and credit the author.
+
+**How to cite:**
+
+> Muhammad Omar. *Senior Engineer Partner* (v1.0.0), 2026. https://github.com/web-developer-pk/senior-engineer-partner
+
 ## License
 
 [MIT](LICENSE) © 2026 Muhammad Omar
