@@ -12,6 +12,7 @@ Keep them short, accurate, and current. Stale docs are worse than missing docs �
 - `ARCHITECTURE.md` — system design
 - `DECISIONS.md` — ADR log
 - `TODO.md` — in-flight and deferred work
+- `HANDOFF.md` — the living session cursor (current state + the single next action), for surviving compaction, crashes, and cold starts
 
 **Product/domain context (strongly recommended for SaaS / multi-tenant):**
 
@@ -233,6 +234,24 @@ Switch to cursor-based pagination using the primary-sort key as the cursor.
 If any of the four engineering-tier files (`CLAUDE.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TODO.md`) are missing from the project root, create them as part of your current task. Use the templates in `assets/` as starting points but fill them in with real project info — do not leave placeholder text in place. A half-filled template is worse than no template, because it lies to the next reader.
 
 For a brand-new project, it's fine for `ARCHITECTURE.md` and `DECISIONS.md` to start small — they'll grow as the project does. `CLAUDE.md` should be complete and accurate from day one. `TODO.md` can be empty (or list "Nothing in flight") but should exist.
+
+## HANDOFF.md
+
+**Purpose:** The living session cursor — a save-game of *where the work is right now*, so a fresh session (after compaction, a crash, or a new chat) resumes exactly where the last left off.
+
+**Audience:** The very next session, which may be a cold start that never saw this conversation.
+
+**Length:** Short and always current. It is overwritten constantly, not appended to.
+
+**What it holds:** current branch + ahead/behind count; what's done-and-verified; what's pending; **the single next action**; live-vs-local state (uncommitted files, running servers, local-only migrations, shell-only env vars); and landmines/constraints the next session could get wrong.
+
+**What makes it different from `TODO.md`:** `TODO.md` is the durable backlog (someday work, known issues, debt). `HANDOFF.md` is the volatile cursor (the next 30 seconds). Keep them separate or they drift and both become untrustworthy.
+
+**When to update:** after any decision or constraint is established; before any risky/long/irreversible operation; and at the end of every work chunk — *not* only when you stop, because compaction and token-death happen mid-chunk. A stale `HANDOFF.md` is worse than none.
+
+**Make it survive deterministically:** the resume-and-reconcile protocol that reads it, and the CLAUDE.md bootstrap plus optional Claude Code `SessionStart` / `PreCompact` hooks that re-inject and archive it, live in `references/session-continuity.md`. Because a skill may not load on a cold start, the bootstrap belongs in `CLAUDE.md` (auto-loaded), not only here.
+
+See `assets/HANDOFF.template.md` for a starter.
 
 ---
 

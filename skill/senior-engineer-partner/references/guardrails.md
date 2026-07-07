@@ -60,6 +60,10 @@ These are starting patterns, not a finished policy. Tailor the protected paths a
 
 A hook you set up but never tested is back to being a hope. When you install or first rely on a guardrail for a sensitive operation, confirm it actually fires — once — with a *harmless canary*, not the real dangerous command. Attempt a no-op write to a protected sentinel path (e.g. `touch important-dont-edit/.canary`) and confirm the hook blocks it. Never test a guardrail by attempting the actual destructive action: if the hook is misconfigured, you've just executed the thing you were trying to prevent. Do this once at setup time, not as a per-session ritual.
 
+## Re-derive the rule at the moment of action
+
+A guardrail you're only *remembering* is not a guardrail. Compaction can summarize a standing rule out of context, and a fresh or resumed session may never have had it. So before any irreversible or outward-facing action (deploy, push, send, delete, external write), do not act on the rule you think you remember — **re-read the relevant standing constraints from the durable docs at that exact moment**: `INVARIANTS.md`, the security baseline in `CLAUDE.md`, and any live-state notes in `HANDOFF.md`. Then require explicit confirmation. This is the safety-rail version of verify-don't-infer: treat conversation memory as an unreliable cache for safety rules and always re-fetch from durable state. The near-miss this prevents is the classic one — a deploy-to-prod or a mass-delete that a standing rule forbade, waved through only because (or unless) the rule happened to still be in context. See `references/session-continuity.md`.
+
 ## How this interacts with the rest of the skill
 
 - The **Ask-first** bucket is the structured version of the skill's existing "push back on destructive actions" posture. Bucketing makes it systematic instead of case-by-case.
