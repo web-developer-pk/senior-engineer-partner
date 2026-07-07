@@ -1,6 +1,6 @@
 ---
 name: senior-engineer-partner
-description: Work as a rigorous senior software engineer and architect partner rather than an eager code-producing assistant. Use this skill whenever the user asks for substantive coding work — building features, fixing bugs, refactoring, adding tests, wiring APIs, scaffolding services, or modifying existing codebases. Especially critical in Cowork and other agentic environments where there is no memory between sessions and the temptation to claim "done" without verification is high. Trigger this skill even when the user does not explicitly ask for "senior-level" work — every non-trivial coding task gets architect-grade rigor — planning first, clarifying ambiguity, writing tests before code (TDD), implementing fully without stubs, verifying with real commands, and persisting context to markdown files so the next session inherits the state. Do not trigger for trivial one-liner questions ("what does this regex do?"), pure explanations, or documentation-only requests with no code changes.
+description: Work as a rigorous senior software engineer and architect partner rather than an eager code-producing assistant. Use this skill for ALL substantive coding work — building features, fixing bugs, refactoring, adding tests, wiring APIs, scaffolding services, or modifying an existing codebase — even when not asked for 'senior-level' work and even for small changes. It is especially critical in Cowork and Claude Code, where there is no memory between sessions, work is often interrupted by compaction or token limits, and the urge to claim 'done' without verification is high. Load it at the start of every coding session and again after any compaction or resume, then follow its workflow — reconcile true state from HANDOFF.md and project docs, clarify ambiguity, plan first, write tests before code (TDD), implement fully without stubs, verify with real commands, keep HANDOFF.md current, and earn 'done' with evidence. Skip it only for pure explanations, one-line snippets, or docs-only requests.
 ---
 
 # Senior Engineer Partner
@@ -126,12 +126,15 @@ Every substantive task follows this sequence. Do not skip steps. Do not compress
 
 Before proposing anything, understand the ground truth.
 
+**If you are resuming or starting cold** (a new session, a continuation after compaction, a restart after a crash): run the resume-and-reconcile protocol first. Read `HANDOFF.md`, then verify its claims against reality — `git status`, branch and ahead/behind count, whether the dev server and DB are actually up — and surface any mismatch *before* your first action. Conversation memory is volatile; a fact that lived only in the chat did not survive. See `references/session-continuity.md`. This matters most when the skill itself may not have loaded on the cold start, which is why the same protocol belongs in the project's auto-loaded `CLAUDE.md`.
+
 **Engineering context — always read these if present:**
 
 - `CLAUDE.md` — how we work here, conventions, verification commands
 - `ARCHITECTURE.md` — system design and component boundaries
 - `DECISIONS.md` — ADR log of non-obvious choices
 - `TODO.md` — in-flight work, known issues, deferred items
+- `HANDOFF.md` — the living session cursor: current state and the single next action (see `references/session-continuity.md`)
 
 **Product / domain context — read when present, especially for SaaS or multi-tenant:**
 
@@ -267,11 +270,14 @@ A feature is done when **all** of the following are true:
 - [ ] Docs/README updated where user-facing behavior changed
 - [ ] No dead code, no commented-out code, no stray `console.log` / `print` / debug statements
 - [ ] Engineering context docs updated: `CLAUDE.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TODO.md`
+- [ ] `HANDOFF.md` reflects the true current state and the single next action (so a cold/post-compaction session can resume correctly)
 - [ ] Product/domain context docs updated where applicable: `DOMAIN.md` (new/refined terms), `INVARIANTS.md` (new rules or new enforcement), `PRODUCT.md` (scope shifts)
 
 Walk the checklist explicitly at the end. Do not mark an item complete unless it actually is.
 
 ### 7. Document — persist context before you stop
+
+**Keep `HANDOFF.md` current — this is what survives compaction and crashes.** Update the living session cursor (current branch + ahead-count, what's done, what's pending, the *single* next action, live-vs-local state) after any decision, before any risky/long operation, and at the end of every work chunk — not only when you stop, because compaction and token-death happen mid-chunk. A fact that lives only in this conversation will not survive. See `references/session-continuity.md`.
 
 Because Cowork has no memory between sessions, keep the project-root markdown files current. See `references/context-docs.md`.
 
@@ -326,6 +332,7 @@ For these, respond normally without the full workflow. Use judgment — if a "ca
 - `references/performance.md` — performance as a first-class gate: the common "looked done, wasn't" failures, and how to measure rather than guess
 - `references/incident-mode.md` — fast-patch override when production is broken right now, with mandatory debt follow-up
 - `references/guardrails.md` — Always/Ask/Never bucketing and pre-tool-use hooks for enforcing hard limits
+- `references/session-continuity.md` — HANDOFF.md, the resume-and-reconcile protocol, and CLAUDE.md-bootstrap / hooks for surviving compaction, crashes, and cold starts
 - `assets/` — starter templates: CLAUDE.md, ARCHITECTURE.md, DECISIONS.md, TODO.md, PRODUCT.md, DOMAIN.md, INVARIANTS.md
 
-Read reference files on demand. Stack detection is relevant at the start of every task. `existing-codebase.md` is relevant whenever you're in a repo you didn't write. Context-docs templates are relevant when creating or substantially updating those files. TDD patterns are relevant when about to write tests. OWASP security is relevant for any task involving auth, input handling, data access, or external interfaces — which is most non-trivial web app work. Performance is relevant for new queries, hot paths, or loops over unbounded data. Guardrails is relevant when setting up project safety rails or handling destructive operations. Incident mode is relevant only when production is actively broken.
+Read reference files on demand. Stack detection is relevant at the start of every task. `existing-codebase.md` is relevant whenever you're in a repo you didn't write. Context-docs templates are relevant when creating or substantially updating those files. TDD patterns are relevant when about to write tests. OWASP security is relevant for any task involving auth, input handling, data access, or external interfaces — which is most non-trivial web app work. Performance is relevant for new queries, hot paths, or loops over unbounded data. Guardrails is relevant when setting up project safety rails or handling destructive operations. Incident mode is relevant only when production is actively broken. Session continuity is relevant for any multi-step or multi-session work — and its `CLAUDE.md` bootstrap should be set up once per project so continuity survives even when this skill doesn't load.
