@@ -19,16 +19,17 @@ This skill is the behavioral antidote. It makes Claude think before it types, ve
 - **TDD by default** — failing test first, confirmed red, then the implementation.
 - **OWASP-aware** — Top 10 and API Top 10 walked during planning and verification for security-adjacent changes.
 - **Earned "done"** — the word requires every verification gate (lint, typecheck, tests, build, smoke test) to have run and passed, with the output shown.
+- **Survives interruption** — a living `HANDOFF.md` cursor, a resume-and-reconcile protocol, and a `CLAUDE.md` bootstrap plus optional Claude Code hooks so work survives context compaction, token limits, crashes, and cold starts.
 
 ## Cross-session memory
 
-Because agentic environments forget between sessions, the skill persists context in seven project-root Markdown files, divided into two tiers:
+Because agentic environments forget between sessions, the skill persists context in eight project-root Markdown files:
 
-**Engineering tier** — `CLAUDE.md` (how to work here), `ARCHITECTURE.md` (system design), `DECISIONS.md` (an append-only ADR log), `TODO.md` (in-flight and deferred work).
+**Engineering tier** — `CLAUDE.md` (how to work here), `ARCHITECTURE.md` (system design), `DECISIONS.md` (an append-only ADR log), `TODO.md` (in-flight and deferred work), and `HANDOFF.md` (a living session cursor — current state and the single next action — that a fresh or post-compaction session reads first to resume correctly).
 
 **Product / domain tier** — `PRODUCT.md` (what the product is and who it's for), `DOMAIN.md` (the ubiquitous language, to kill same-word-different-meaning bugs), `INVARIANTS.md` (the tested "never, ever" list).
 
-Starter templates for all seven live in [`skill/senior-engineer-partner/assets/`](skill/senior-engineer-partner/assets).
+Starter templates for all eight live in [`skill/senior-engineer-partner/assets/`](skill/senior-engineer-partner/assets). Surviving compaction and crashes — the resume-and-reconcile protocol, the `CLAUDE.md` bootstrap, and Claude Code `SessionStart` / `PreCompact` hooks — is covered in [`references/session-continuity.md`](skill/senior-engineer-partner/references/session-continuity.md).
 
 ## What's in the box
 
@@ -39,12 +40,13 @@ skill/senior-engineer-partner/
 │   ├── stack-detection.md        # stack -> verification commands; DB introspection
 │   ├── tdd-patterns.md           # TDD patterns, incl. characterization tests & sick suites
 │   ├── owasp-security.md         # OWASP Top 10 + API Top 10 + data-handling/privacy
-│   ├── context-docs.md           # guidance for the seven context files
+│   ├── context-docs.md           # guidance for the eight context files
 │   ├── existing-codebase.md      # brownfield: archaeology, migration, backward-compat
 │   ├── performance.md            # performance as a first-class verification gate
 │   ├── incident-mode.md          # fast-patch override for active production incidents
-│   └── guardrails.md             # Always/Ask/Never buckets + pre-tool-use hooks
-└── assets/                       # starter templates for the 7 context docs
+│   ├── guardrails.md             # Always/Ask/Never buckets + pre-tool-use hooks
+│   └── session-continuity.md    # HANDOFF.md, resume-and-reconcile, CLAUDE.md-bootstrap + hooks
+└── assets/                       # starter templates for the 8 context docs
 ```
 
 ## Install
@@ -90,7 +92,7 @@ This skill is substantial original work — many hours of design, testing, and i
 
 **How to cite:**
 
-> Muhammad Omar. *Senior Engineer Partner* (v1.0.0), 2026. https://github.com/web-developer-pk/senior-engineer-partner
+> Muhammad Omar. *Senior Engineer Partner* (v1.1.0), 2026. https://github.com/web-developer-pk/senior-engineer-partner
 
 ## License
 
