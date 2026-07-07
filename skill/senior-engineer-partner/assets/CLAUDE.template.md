@@ -2,6 +2,23 @@
 
 Operating guide for Claude working in this project. Read this first.
 
+## Session start — do this first, every session
+
+This block is here (not only in the skill) because `CLAUDE.md` is auto-loaded every
+session, while the skill may not trigger on a cold or post-compaction start.
+
+1. Read `HANDOFF.md` for current state, then reconcile it against reality before
+   acting: `git status` + branch/ahead-count, is the dev server up (hit its health
+   endpoint), is the DB up and migrated. Surface any mismatch before the first action.
+2. Apply the `senior-engineer-partner` skill for substantive coding work. If it did
+   not auto-load, follow its core rules anyway: verify-don't-infer, TDD, no stubs,
+   earned "done", and keep `HANDOFF.md` current (after each decision, before risky
+   ops, at the end of every chunk).
+3. Before any deploy / push / delete / external write, re-read the standing
+   constraints in `INVARIANTS.md` and the Security baseline below at that moment —
+   do not rely on remembered rules.
+
+
 ## Project summary
 
 <!-- One paragraph: what this project is and what it does. -->
@@ -70,3 +87,4 @@ Project-specific security rules. Examples:
 - See `TODO.md` for in-flight work.
 - See `DOMAIN.md` for term definitions (if present).
 - See `INVARIANTS.md` for rules that must always hold (if present).
+- See `HANDOFF.md` for current session state and the next action (if present).
